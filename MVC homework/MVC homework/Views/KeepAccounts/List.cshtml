@@ -1,0 +1,24 @@
+﻿@model List<MVC_homework.Models.KeepAccountsViewModel>
+@using MVC_homework.Service
+
+<table border="1" width="100%">
+    <tr>
+        <th>#</th>
+        <th>類別</th>
+        <th>日期</th>
+        <th>金額</th>
+    </tr>
+    @if (Model != null && Model.Any())
+    {
+        int no = 1;
+        foreach (var item in Model)
+        {
+            <tr>
+                <td>@(no++)</td>
+                <td>@KeepAccountsAPI.GetDescription((KeepAccountsAPI.KeepAccountType)item.Type)</td>
+                <td>@item.Date.ToString("yyyy-MM-dd")</td>
+                <td>@item.Money.ToString("N0")</td>
+            </tr>
+        }
+    }
+</table>
