@@ -1,5 +1,4 @@
 ﻿@model List<MVC_homework.Models.KeepAccountsViewModel>
-@using MVC_homework.Service
 
 <table border="1" width="100%">
     <tr>
@@ -7,6 +6,7 @@
         <th>類別</th>
         <th>日期</th>
         <th>金額</th>
+        <th>備註</th>
     </tr>
     @if (Model != null && Model.Any())
     {
@@ -15,9 +15,10 @@
         {
             <tr>
                 <td>@(no++)</td>
-                <td>@KeepAccountsAPI.GetDescription((KeepAccountsAPI.KeepAccountType)item.Type)</td>
+                <td>@item.Type</td>
                 <td>@item.Date.ToString("yyyy-MM-dd")</td>
                 <td>@item.Money.ToString("N0")</td>
+                <td>@item.Remark</td>
             </tr>
         }
     }

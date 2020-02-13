@@ -10,34 +10,53 @@ namespace MVC_homework.Service
 {
     public static class KeepAccountsAPI
     {
+        private static Model1 _model1 = new Model1();
+
         public static List<KeepAccountsViewModel> GetData()
         {
-            DateTime now = DateTime.Now;
+            #region 自訂資料來源
+
+            //DateTime now = DateTime.Now;
+            //List<KeepAccountsViewModel> list = new List<KeepAccountsViewModel>();
+            //for (int i = 1; i <= 100; i++)
+            //{
+            //    KeepAccountsViewModel account = new KeepAccountsViewModel();
+            //    DateTime date = now.AddDays(-i);
+
+            //    //5號領薪水
+            //    if(date.Day == 5)
+            //    {
+            //        account.Type = (int)KeepAccountType.income;
+            //        account.Money = 100000;
+            //        account.Date = date;
+            //        list.Add(account);
+            //    }
+
+            //    account = new KeepAccountsViewModel();
+
+            //    //一天限制只能花1000以下
+            //    account.Type = (int)KeepAccountType.expenditure;
+            //    account.Money = new Random(Guid.NewGuid().GetHashCode()).Next(0, 1000);
+            //    account.Date = date;
+
+            //    list.Add(account);
+            //}
+
+            #endregion
+            
             List<KeepAccountsViewModel> list = new List<KeepAccountsViewModel>();
-            for (int i = 1; i <= 100; i++)
+            var accountBooks = _model1.AccountBooks.OrderByDescending(x=>x.Dateee);
+
+            foreach (var item in accountBooks)
             {
-                KeepAccountsViewModel account = new KeepAccountsViewModel();
-                DateTime date = now.AddDays(-i);
-
-                //5號領薪水
-                if(date.Day == 5)
-                {
-                    account.Type = (int)KeepAccountType.income;
-                    account.Money = 100000;
-                    account.Date = date;
-                    list.Add(account);
-                }
-
-                account = new KeepAccountsViewModel();
-
-                //一天限制只能花1000以下
-                account.Type = (int)KeepAccountType.expenditure;
-                account.Money = new Random(Guid.NewGuid().GetHashCode()).Next(0, 1000);
-                account.Date = date;
-
-                list.Add(account);
+                list.Add(new KeepAccountsViewModel {
+                    Date = item.Dateee,
+                    Money = item.Amounttt,
+                    Type = GetDescription((KeepAccountType)item.Categoryyy),
+                    Remark = item.Remarkkk
+                });
             }
-
+                        
             return list;
         }
 
