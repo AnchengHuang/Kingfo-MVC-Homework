@@ -1,8 +1,45 @@
 ﻿
 @{
     ViewBag.Title = "Index";
+    var categories = (Dictionary<int, string>)ViewBag.Category;
+    var errorDic = (Dictionary<string, string>)ViewBag.ErrorDic;
 }
 
 <h2>Index</h2>
+<form action="@Url.Action("Create","KeepAccounts")" method="post" enctype="multipart/form-data">
+    <div>
+        類別:
+        <select name="Category">
+            @foreach(var item in categories)
+            {
+                <option value="@item.Key">@item.Value</option>
+            }
+        </select>        
+        <br/>
+        日期:
+        <input type="date" name="Date" />
+        @if (errorDic != null && errorDic.Keys.Contains("Date"))
+        {
+            <label style="color:red">@errorDic["Date"]</label>
+        }
+        <br/>
+        金額:
+        <input type="text" name="Amount" />
+        @if (errorDic != null && errorDic.Keys.Contains("Amount"))
+        {
+            <label style="color:red">@errorDic["Amount"]</label>
+        }
+        <br />
+        備註:
+        <input type="text" multiple="multiple" name="Remark" />
+        <br />
+        @if (errorDic != null && errorDic.Keys.Contains("CreateFail"))
+        {
+            <label style="color:red">@errorDic["CreateFail"]</label>
+        }
+        <br />
+        <input type="submit" value="新增" />
+    </div>
+</form>
 
 @Html.Action("List")

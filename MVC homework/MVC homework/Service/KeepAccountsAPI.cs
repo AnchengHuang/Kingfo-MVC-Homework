@@ -1,6 +1,7 @@
 ﻿using MVC_homework.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -77,6 +78,56 @@ namespace MVC_homework.Service
                         as DescriptionAttribute;
 
             return attribute == null ? value.ToString() : attribute.Description;
+        }
+
+        public static Dictionary<int,string> GetKeepAccountType()
+        {
+            Dictionary<int, string> typies = new Dictionary<int, string>();
+            foreach (var item in Enum.GetValues(typeof(KeepAccountType)))
+            {
+                KeepAccountType type = (KeepAccountType)item;
+                typies.Add((int)type, GetDescription(type));
+            }
+            return typies;
+        }
+
+        public static Dictionary<string,string> DataCheck(NameValueCollection collection)
+        {
+            Dictionary<string, string> errorMsg = new Dictionary<string, string>();
+
+            DateTime date;
+            if (!DateTime.TryParse(collection["Date"], out date))
+                errorMsg.Add("Date","日期格式錯誤!");
+
+            int amount;
+            if (!int.TryParse(collection["Amount"], out amount))
+                errorMsg.Add("Amount", "金額格式錯誤!");
+
+            return errorMsg;
+        }
+
+        public static bool Create(NameValueCollection collection)
+        {
+            try
+            {
+                _model1.AccountBooks.Add(
+                            new AccountBook
+                            {
+                                Id = Guid.NewGuid(),
+                                Amounttt = Convert.ToInt32(collection["Amount"]),
+                                Categoryyy = Convert.ToInt32(collection["Category"]),
+                                Dateee = Convert.ToDateTime(collection["Date"]),
+                                Remarkkk = collection["Remark"]
+                            });
+
+                _model1.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
+            return true;            
         }
     }
 }
