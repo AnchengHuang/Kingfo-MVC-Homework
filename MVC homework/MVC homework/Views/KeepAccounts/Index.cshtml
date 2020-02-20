@@ -15,6 +15,7 @@
                 <option value="@item.Key">@item.Value</option>
             }
         </select>        
+        <br />
         <br/>
         日期:
         <input type="date" name="Date" />
@@ -22,6 +23,7 @@
         {
             <label style="color:red">@errorDic["Date"]</label>
         }
+        <br />
         <br/>
         金額:
         <input type="text" name="Amount" />
@@ -30,16 +32,23 @@
             <label style="color:red">@errorDic["Amount"]</label>
         }
         <br />
+        <br />
         備註:
-        <input type="text" multiple="multiple" name="Remark" />
+        <textarea name="Remark" style="width:300px;height:100px;"></textarea>
+        <br />
         <br />
         @if (errorDic != null && errorDic.Keys.Contains("CreateFail"))
         {
             <label style="color:red">@errorDic["CreateFail"]</label>
         }
+        @if (errorDic != null && errorDic.Keys.Contains("DeleteFail"))
+        {
+            <label style="color:red">@errorDic["DeleteFail"]</label>
+        }
         <br />
         <input type="submit" value="新增" />
     </div>
 </form>
+<br />
 
 @Html.Action("List")

@@ -34,9 +34,26 @@ namespace MVC_homework.Controllers
                 return View("Index");
 
             if (!KeepAccountsAPI.Create(form))
+            {
                 errorMsg.Add("CreateFail", "新增失敗!");
+                return View("Index");
+            }
 
-            return View("Index");
-        }        
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Delete(Guid id)
+        {
+            Dictionary<string, string> errorMsg = new Dictionary<string, string>(); ;
+            ViewBag.ErrorDic = errorMsg;
+
+            if (!KeepAccountsAPI.Delete(id))
+            {
+                errorMsg.Add("DeleteFail","刪除失敗!");
+                return View("Index");
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

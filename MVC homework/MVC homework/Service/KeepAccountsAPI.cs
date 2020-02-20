@@ -51,6 +51,7 @@ namespace MVC_homework.Service
             foreach (var item in accountBooks)
             {
                 list.Add(new KeepAccountsViewModel {
+                    ID= item.Id,
                     Date = item.Dateee,
                     Money = item.Amounttt,
                     Type = GetDescription((KeepAccountType)item.Categoryyy),
@@ -128,6 +129,26 @@ namespace MVC_homework.Service
             }
 
             return true;            
+        }
+
+        public static bool Delete(Guid id)
+        {
+            var accountBook = _model1.AccountBooks.Find(id);
+            if (accountBook == null)
+                return false;
+
+            _model1.AccountBooks.Remove(accountBook);
+
+            try
+            {
+                _model1.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -2,6 +2,7 @@
 
 <table border="1" width="100%">
     <tr>
+        <th></th>
         <th>#</th>
         <th>類別</th>
         <th>日期</th>
@@ -14,6 +15,7 @@
         foreach (var item in Model)
         {
             <tr>
+                <td><a href="@Url.Action("Delete", "KeepAccounts", new { id = item.ID })" onclick="return confirm('確定刪除嗎?')">刪除</a></td>
                 <td>@(no++)</td>
                 <td>@item.Type</td>
                 <td>@item.Date.ToString("yyyy-MM-dd")</td>
