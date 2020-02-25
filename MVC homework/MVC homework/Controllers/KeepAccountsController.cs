@@ -10,11 +10,19 @@ namespace MVC_homework.Controllers
 {
     public class KeepAccountsController : Controller
     {
+        private static Model1 _model1 = new Model1();
+
         // GET: KeepAccounts
-        public ActionResult Index()
+        public ActionResult Index(Guid? id)
         {
             ViewBag.Category = KeepAccountsAPI.GetKeepAccountType();
-            return View();
+
+            var model = id.HasValue ? _model1.AccountBooks.Find(id) : null;
+
+            if (model != null)
+                _model1.Entry(model).Reload();//要加這行才不會讀到快取的舊資料
+
+            return View(model);
         }
 
         [ChildActionOnly]
@@ -23,7 +31,7 @@ namespace MVC_homework.Controllers
             return PartialView(KeepAccountsAPI.GetData());
         }
 
-        public ActionResult Create(FormCollection form)
+        public ActionResult Save(FormCollection form, Guid? id)
         {
             ViewBag.Category = KeepAccountsAPI.GetKeepAccountType();
 
@@ -33,10 +41,21 @@ namespace MVC_homework.Controllers
             if (errorMsg.Any())
                 return View("Index");
 
-            if (!KeepAccountsAPI.Create(form))
+            if (id.HasValue)
             {
-                errorMsg.Add("CreateFail", "新增失敗!");
-                return View("Index");
+                if (!KeepAccountsAPI.Edit(form, id))
+                {
+                    errorMsg.Add("EditFail", "編輯失敗!");
+                    return View("Index");
+                }
+            }
+            else
+            {
+                if (!KeepAccountsAPI.Create(form))
+                {
+                    errorMsg.Add("CreateFail", "新增失敗!");
+                    return View("Index");
+                }
             }
 
             return RedirectToAction("Index");
@@ -49,7 +68,7 @@ namespace MVC_homework.Controllers
 
             if (!KeepAccountsAPI.Delete(id))
             {
-                errorMsg.Add("DeleteFail","刪除失敗!");
+                errorMsg.Add("DeleteFail", "刪除失敗!");
                 return View("Index");
             }
 

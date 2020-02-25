@@ -1,32 +1,41 @@
-﻿
+﻿@model MVC_homework.Models.AccountBook
+
 @{
     ViewBag.Title = "Index";
     var categories = (Dictionary<int, string>)ViewBag.Category;
     var errorDic = (Dictionary<string, string>)ViewBag.ErrorDic;
+    var isEditModel = Model != null;
 }
 
 <h2>Index</h2>
-<form action="@Url.Action("Create","KeepAccounts")" method="post" enctype="multipart/form-data">
+<form action="@Url.Action("Save", "KeepAccounts", new { id = isEditModel ? (Guid?)Model.Id : null })" method="post" enctype="multipart/form-data">
     <div>
         類別:
         <select name="Category">
-            @foreach(var item in categories)
+            @foreach (var item in categories)
             {
-                <option value="@item.Key">@item.Value</option>
+                if (isEditModel && item.Key == Model.Categoryyy)
+                {
+                    <option value="@item.Key" selected="selected">@item.Value</option>
+                }
+                else
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
             }
-        </select>        
+        </select>
         <br />
-        <br/>
+        <br />
         日期:
-        <input type="date" name="Date" />
+        <input type="date" name="Date" value="@(isEditModel?Model.Dateee.ToString("yyyy-MM-dd"):string.Empty)" />
         @if (errorDic != null && errorDic.Keys.Contains("Date"))
         {
             <label style="color:red">@errorDic["Date"]</label>
         }
         <br />
-        <br/>
+        <br />
         金額:
-        <input type="text" name="Amount" />
+        <input type="text" name="Amount" value="@(isEditModel?Model.Amounttt.ToString():string.Empty)" />
         @if (errorDic != null && errorDic.Keys.Contains("Amount"))
         {
             <label style="color:red">@errorDic["Amount"]</label>
@@ -34,19 +43,28 @@
         <br />
         <br />
         備註:
-        <textarea name="Remark" style="width:300px;height:100px;"></textarea>
+        <textarea name="Remark" style="width:300px;height:100px;">@(isEditModel ? Model.Remarkkk : string.Empty)</textarea>
         <br />
         <br />
         @if (errorDic != null && errorDic.Keys.Contains("CreateFail"))
         {
             <label style="color:red">@errorDic["CreateFail"]</label>
         }
+        @if (errorDic != null && errorDic.Keys.Contains("EditFail"))
+        {
+            <label style="color:red">@errorDic["EditFail"]</label>
+        }
         @if (errorDic != null && errorDic.Keys.Contains("DeleteFail"))
         {
             <label style="color:red">@errorDic["DeleteFail"]</label>
         }
         <br />
-        <input type="submit" value="新增" />
+        <input type="submit" value="@(isEditModel ? "編輯" : "新增") " />
+
+        @if (isEditModel)
+        {
+            <a href="@Url.Action("Index", "KeepAccounts",new { id = (Guid?)null})">取消</a>
+        }
     </div>
 </form>
 <br />

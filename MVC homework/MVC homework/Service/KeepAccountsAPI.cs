@@ -131,6 +131,29 @@ namespace MVC_homework.Service
             return true;            
         }
 
+        public static bool Edit(NameValueCollection collection,Guid? id)
+        {
+            var accountBooks = _model1.AccountBooks.Find(id);
+            if (accountBooks == null)
+                return false;
+
+            accountBooks.Amounttt = Convert.ToInt32(collection["Amount"]);
+            accountBooks.Categoryyy = Convert.ToInt32(collection["Category"]);
+            accountBooks.Dateee = Convert.ToDateTime(collection["Date"]);
+            accountBooks.Remarkkk = collection["Remark"];
+
+            try
+            {
+                _model1.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public static bool Delete(Guid id)
         {
             var accountBook = _model1.AccountBooks.Find(id);

@@ -15,7 +15,11 @@
         foreach (var item in Model)
         {
             <tr>
-                <td><a href="@Url.Action("Delete", "KeepAccounts", new { id = item.ID })" onclick="return confirm('確定刪除嗎?')">刪除</a></td>
+                <td>
+                    <a href="@Url.Action("Delete", "KeepAccounts", new { id = item.ID })" onclick="return confirm('確定刪除嗎?')">刪除</a>
+                    <br/>
+                    <a href="@Url.Action("Index", "KeepAccounts", new { id = item.ID })">編輯</a>
+                </td>
                 <td>@(no++)</td>
                 <td>@item.Type</td>
                 <td>@item.Date.ToString("yyyy-MM-dd")</td>
